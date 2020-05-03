@@ -52,11 +52,15 @@ function main() {
 
     drawScene();
 
+    //TODO: fit to precomputed grid
+
 
     function updateTargetAngle1(event, width, height) {
-        target[2] = fit(event.clientX, 1, width, -700, 700);
+        let precompX = 350*width/height;
+        target[2] = fit(event.clientX, 1, width, -precompX, precompX);
         target[0] = fit(event.clientY, 1, height, 300, -300);
         console.log(target[0], target[2]);
+        console.log(gl.canvas.width/gl.canvas.height*5);
         drawScene();
     }
 
@@ -70,7 +74,7 @@ function main() {
 
 	var cnv = document.querySelector("#canvas");
 	document.addEventListener("mousemove", (event) => {
-  	    updateTargetAngle1(event, cnv.width, cnv.height);
+          updateTargetAngle1(event, cnv.width, cnv.height);
     })
   
 	
@@ -79,7 +83,6 @@ function main() {
     targetAngleRadians = degToRad(ui.value);
     target[0] = Math.sin(targetAngleRadians) * targetRadius;
     target[2] = Math.cos(targetAngleRadians) * targetRadius;
-    console.log(target[0], target[2]);
     drawScene();
   }
 
@@ -163,7 +166,7 @@ function main() {
     var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     // Draw heads in a grid
-    var deep = 10;
+    var deep = gl.canvas.width/gl.canvas.height*4;
     var across = 5;
     for (var zz = 0; zz < deep; ++zz) {
       var v = zz / (deep - 1);
